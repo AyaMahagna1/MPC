@@ -1,0 +1,74 @@
+\documentclass[12pt]{article}
+\usepackage{psfig}
+\usepackage{latexsym}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\setlength{\textheight}{8.5in}
+\setlength{\textwidth}{6.0in}
+\setlength{\headheight}{0in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\oddsidemargin}{-.5in}
+
+\input{hw-preamble.tex}
+\begin{document}
+
+\hw{}{}{Dr. Adi Akavia}{Yahel , Ammar , Rana , Aya}
+
+
+\section*{Abstract}
+In this report we will describe our implementation for Privacy-Preserving Ridge Regression with only Linearly-Homomorphic Encryption according to this \href{https://eprint.iacr.org/2017/979.pdf}{\textbf{Paper}} ,and also an implementation without privacy preserving , we we'll compare between the two implementations, optimizations, tests, complexity and running time.
+
+\section{Introduction}
+In this report we will describe our implementation to  train a ridge linear regression model using only Linearly homomorphic encryption as described in the paper.
+We implemented the project in Python using librariries such as numpy, Paillier and hashlib.
+\section{Privacy preserving implementation}
+\subsection{Classes and functions:}
+We've implemented the system as described in the paper.
+\\ \\ \textbf{LabHE class:} that is a cryptographic tool as described in the paper with same methods (init which is the same as localGen,labEnc and labDec).
+\\ \\ \textbf{LabeledCiphertext class:} which is  implementation of ciphertext for labHE.
+\\ \\ \textbf{CSP class:} a crypto service provider which takes care of initializing the encryption scheme used in the system and interacts with MLE (phase 1, 2 and protocols as decribed).
+\\ \\ \textbf{MLE class:} the Machine-Learning Engine which wants to run a linear regression
+algorithm on the dataset D obtained by merging the local datasets. (It executes phase 1, 2 as described in the paper).
+\\ \\ \textbf{DO class:} the Data-Owners there are m data-owners , each data-owner has a
+private dataset  and is willing to share it only if encrypted to preserve privacy (Phase 1), it gets a public from CSP and sends the encrypted data.
+\\ \\ \textbf{getNetWorkSetup function:} it gets number of the data owners as parameter and create all the pipes and queues needed for communication.
+\\ \\ \textbf{run function}:it creates the threading and run the system.
+\\ \\ \textbf{setDataByPartition function:} utility function, splitting the data by the partition and give it to the data owners.
+\subsection{Tests and communication complexity:}
+For testing our implementation we defined a random output (n*d matrix ), we run the system on it and we calculated the execution time and communication complexity for different n and d (n-number of data points , d-number of features), here is some of our running results: \\
+\\
+\begin{tabular}{ |p{3cm}|p{3cm}|p{3cm}| p{3cm}|}
+\hline
+\textbf{n} & \textbf{d} & \textbf{Time(seconds)} & \textbf{KB} \\
+\hline
+3 & 6 &  2.191508 & 37\\
+\hline
+10 & 10 & 20.6696918 & 197\\
+\hline
+15 & 10 & 39.149615 & 371\\
+\hline
+20 & 10 & 67.52147293 & 600\\
+\hline
+100 & 20 &  3329.709427 & 12390\\
+\hline
+\end{tabular}
+\section{Implementation without privacy preserving} 
+\subsection{Classes and functions:}
+Since this implementation doesn't preserve privacy we don't need threads and CSP and LabHE and the encryption, So we have to classes:
+\\ \\ \textbf{DO Class:} the data owner who is sharing the datasets with MLE.
+\\ \\ \textbf{MLE class:} it receives the dataset from the data owner and returns w* as defined in the paper.
+\subsection{Tests and execution time:}
+For testing our implementation we defined a random output (n*d matrix ), we run the system on it and we calculated the execution time for different n and d (n-number of data points , d-number of features), we tested the same values n and d in this implementation and all of them took less than 1 second which much faster.
+\section{Conclusion:}
+It's much faster to run implementation that doesn't preserve privacy and with out encryption and it has less functions and communications, but it doesn't protect the privacy of the data which may be sensitive data that we don't want to share.
+\section{Optimization:}
+- Using Damgård-Jurik scheme \\ \\
+- Modifying the masking to improve efficiency\\ \\ 
+- Active security\\ \\
+\end{document}
+
+
+
+
+
+

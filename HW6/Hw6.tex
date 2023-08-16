@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{psfig}
+\usepackage{latexsym}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\setlength{\textheight}{8.5in}
+\setlength{\textwidth}{6.0in}
+\setlength{\headheight}{0in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\oddsidemargin}{-.5in}
+\usepackage{graphicx}
+\input{hw-preamble.tex}
+\begin{document}
+
+
+%\lecture{1}{October 29, 2019}{Adi Akavia}{(your name here)}
+\hw{6}{Fall 2021}{Dr. Adi Akavia}{()}
+%%%% body goes in here %%%%
+\section*{Work space:}
+We used Python to implement a 1-out-of-2 OT protocol against passive adversary, we used OT to eliminate  the dealer we implemented before.
+\section*{Classes,Functions and implementation:}
+\subsection*{PKE ElGamal class:}
+we implemented class with the name PKE Elgamal, with init function which choose a random number  p and check if it's prime number  and if 2*p+1 is prime too using helper functions we've implemented, in addition it initialize q which is equal to 2*p+1.
+we also implemented Gen,OGen,Enc and dec as functions in this class as we've learned. 
+\subsection*{OT class:}
+OT class is a class we've implemented instead the dealer we've implemented in previous assignments , and it was implemented as we've learned in lectures, init function saves the PKE scheme, load function saves the messages into data variable to use it later,in getkeys function the function gets key as parameter and create a message using enc function we've implemented in PKE ElGamal class.
+Sendmsgs functions returns the message we've created in getkeys, chose defines sk and pk using Gen and OGen functions we've implemented before(pk and sk same as it was defined in lecture), sendchose returns the pks (Gen and OGen), getData returns output dec as defined in ElGamal cryptosystem in lecture.
+\subsection*{TVK class:}
+In this class we used MACs to authenticate secret shares, this class is almost the same as previous assignments (Expat for the use of multiply MACs per value for security when using $p=2$).
+\\ \textbf{init function}: in this function we get the keys of both Bob and Alice and value and prime p and we calculate Tag and save it in variable t.
+\\ \textbf{add function}:loading of the adding symbol, used as the additive secret sharing schema.
+\\ \textbf{ mul const function}: Multiplying the share by a constant, the input parameter i is the indicator of which player running this commend (Alice or Bob).
+\\ \textbf{add const function}: Adding the share by a constant, the input parameter i is the indicator of which player running this commend (Alice or Bob).
+\\ \textbf{str function}:Helper function for printing the TVK object which consist of key,value and tag.
+\\ \textbf{and function}:Loading of the and symbol for two values and returns null/none if not valid.
+\\ \textbf{kless function}: returns TVK object with same tag and value and p.
+ \\ \textbf{TKVpair function}: returns the pairs $t_{A,x}$, $t_{B,x}$  as taught in class.
+\subsection*{BeDOZa Agent:}
+Instead of defining classes as Alice and Bob we defined BeDOZa Agent which has same functionality as Alice and Bob, We added init function to this class that initializing the circle and all the inputs, we used the OT class instead of the dealer(almost the same class as previous assignments).
+\subsection*{circuits:} We've used the same circuits as previous assignments.
+\section*{Test and complexity:}
+We tested and checked if all the classes are correct and the output is always right(PKE-ElGamal,1-out-of-2 OT,TVK ,BeDOZa on simple circuit,BeDOZa on Equation3) , we also calculated BeDOZa communication complexity in respect to the security parameter
+\section*{Execution Time:}
+We also calculated the executing time by using package time and subtract the start time from the time when we end running the tests and we got different times of execution such as  7.6412622928619385 seconds, 8.687679767608643 seconds, 7.228432655334473 seconds.
+\end{document}
